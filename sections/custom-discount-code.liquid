@@ -1,0 +1,63 @@
+{% comment %} <div class="cart-discount-box" data-section-id="{{ section.id }}">
+  <label class="text-sm font-medium">Discount Code</label>
+
+  <div style="display:flex; gap:10px; margin-top:5px;">
+    <input
+      type="text"
+      id="discount_code_{{ section.id }}"
+      name="discount_code"
+      placeholder="Discount code"
+      class="field__input"
+      style="flex: 1; border: 1px solid #ddd; padding: 8px; border-radius: 5px;"
+    >
+    <button
+      type="button"
+      id="apply_discount_{{ section.id }}"
+      class="button"
+      style="background: black; color: white; border-radius: 100px; padding: 8px 16px;"
+    >
+      Apply
+    </button>
+  </div>
+  <p id="discount_message_{{ section.id }}" style="margin-top:6px; font-size:13px;"></p>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const applyBtn = document.querySelector('#apply_discount_{{ section.id }}');
+    const codeInput = document.querySelector('#discount_code_{{ section.id }}');
+    const message = document.querySelector('#discount_message_{{ section.id }}');
+    applyBtn.addEventListener('click', function () {
+      const code = codeInput.value.trim();
+      if (!code) {
+        message.textContent = 'Please enter a discount code.';
+        message.style.color = 'red';
+        return;
+      }
+      fetch('/discount/' + code)
+        .then(() => fetch('/cart.js'))
+        .then((res) => res.json())
+        .then((cart) => {
+          if (cart.cart_level_discount_applications.length > 0) {
+            message.textContent = 'Discount applied successfully!';
+            message.style.color = 'green';
+            const sectionId = '{{ section.id }}';
+            const url = window.location.pathname + '?sections={{ section.id }}';
+            fetch(url)
+              .then((res) => res.json())
+              .then((data) => {
+                const container = document.querySelector("[data-section-id='{{ section.id }}']");
+                container.innerHTML = data['{{ section.id }}'];
+              });
+          } else {
+            message.textContent = 'Invalid or expired discount code!';
+            message.style.color = 'red';
+          }
+        })
+        .catch(() => {
+          message.textContent = 'Something went wrong!';
+          message.style.color = 'red';
+        });
+    });
+  });
+</script> {% endcomment %}

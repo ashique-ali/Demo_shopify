@@ -1,0 +1,70 @@
+<div class="pinCode_container">
+  <div style="display: flex">
+    <div class="form-group">
+      <input type="text" maxlength="6" name="pincode" placeholder="Enter pincode" class="pinCode">
+    </div>
+    <div class="pincode_button">
+      <button class="btn">Check</button>
+    </div>
+  </div>
+  <span class="pincode_error"></span>
+</div>
+
+<style>
+    .btn:hover {
+        cursor: pointer;
+    }
+    .form-group {
+        width: 30rem;
+    }
+    .pinCode_container {
+        margin: 2.5rem 0;
+        width: 30rem;
+    }
+    .form-group input[type="text"] {
+        border: 1px solid #000;
+        outline: none;
+        box-shadow: none;
+        padding: 14px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        width: 100%;
+    }
+
+    .pincode_button button {
+        padding: 14px;
+        border: none;
+        outline: none;
+        color: #fff;
+        border: 1px solid #000;
+        background: #000;
+        outline: none;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+    .success_message {
+      color: green;
+  }
+  .error_message {
+      color: red;
+  }
+</style>
+
+<script>
+    const zipCodes = [{{ settings.pincode }}];
+    const btn = document.querySelector('.btn');
+    btn.addEventListener('click', () => {
+      const inputValue = document.querySelector(".pinCode").value;
+        if(inputValue === "") {
+            $('.pincode_error').html(`<span class="error_message">Enter a valid 6-digit pincode</span>`);
+            return;
+        }
+        const pin = parseInt(inputValue, 10);
+        if (zipCodes.includes(pin)) {
+            $('.pincode_error').html(`<span class="success_message">Delivery is serviceable (${pin}).</span>`);
+        } else {
+            $('.pincode_error').html(`<span class="error_message">Delivery is not serviceable (${pin}).</span>`);
+        }
+        localStorae.setItem("userpincode", pin);
+    });
+</script>

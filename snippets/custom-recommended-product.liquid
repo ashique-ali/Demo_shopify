@@ -1,0 +1,180 @@
+
+  {% assign collection = collections[settings.cart_recommedation] %}
+
+  {% assign page_title = 'Recommanded product' %}
+  <div>
+    {% if page_title != 'Recommanded product' %}
+      <div>
+        <h3 class="title">{{ page_title }}</h3>
+      </div>
+    {% endif %}
+    <div class="cart-recommended">
+      {% for item in cart.items %}
+        {% assign collection = item.product.metafields.custom.recommended_products.value %}
+        {% for product in collection %}
+          {% render 'duplication-recommanded-grid',
+            card_product: product,
+            media_aspect_ratio: section.settings.image_ratio,
+            image_shape: section.settings.image_shape,
+            show_secondary_image: section.settings.show_secondary_image,
+            show_vendor: section.settings.show_vendor,
+            show_rating: section.settings.show_rating,
+            lazy_load: lazy_load,
+            skip_styles: skip_card_product_styles,
+            quick_add: section.settings.quick_add,
+            section_id: section.id
+          %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <style>
+    .cart-recommended {
+        display: flex;
+        gap: 12px;
+        overflow-x: scroll;
+    }
+
+    .title {
+        margin: 0px;
+        margin-bottom: 8px;
+        margin-top: 20px;
+    }
+
+    .cart-recommended .card-wrapper.product-card-wrapper.underline-links-hover {
+        width: 100%;
+        min-width: 130px !important;
+    }
+  </style>
+
+
+{% comment %}
+  <div class="related-products">
+    <h2>Related Products</h2>
+    <div id="collectionProducts"></div>
+  </div>
+
+  <script>
+    async function getCollections() {
+      const query = `{
+      collections(first: 1) {
+        edges {
+          node {
+            id
+            title
+            handle
+            image {
+              url
+              altText
+            }
+            products(first: 10) {
+              edges {
+                node {
+                  id
+                  title
+                  featuredImage {
+                    url
+                  }
+                  priceRange {
+                    minVariantPrice {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    `;
+      const response = await fetch('https://ashiq-007.myshopify.com/api/2025-10/graphql.json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Storefront-Access-Token': '4a56643f353f4b5a7fc5c59784702ae9',
+        },
+        body: JSON.stringify({ query }),
+      });
+      const json = await response.json();
+      displayProducts(json.data.collections.edges);
+    }
+
+    function displayProducts(collections) {
+      const container = document.getElementById('collectionProducts');
+      collections.forEach((collection) => {
+        collection.node.products.edges.forEach((product) => {
+          const item = product.node;
+          const img = item.featuredImage ? item.featuredImage.url : '';
+          const price = item.priceRange.minVariantPrice.amount;
+          container.innerHTML += `
+          <div>
+            <img src="${img}" />
+            <h3>${item.title}</h3>
+            <p>₹${price}</p>
+          </div>
+        `;
+        });
+      });
+    }
+    getCollections();
+  </script>
+{% endcomment %}
+
+{% comment %} <h2 style="margin:20px 0;">You May Also Like</h2>
+
+<div id="youMayAlsoLike" style="display:flex; gap:20px; flex-wrap:wrap;"></div>
+
+<script>
+  async function getRecommendedProducts() {
+    const query = `
+  {
+    products(first: 8) {
+      edges {
+        node {
+          id
+          title
+          featuredImage {
+            url
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+        }
+      }
+    }
+  }
+  `;
+
+    const response = await fetch('https://ashiq-007.myshopify.com/api/2024-07/graphql.json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Storefront-Access-Token': '4a56643f353f4b5a7fc5c59784702ae9',
+      },
+      body: JSON.stringify({ query }),
+    });
+    const json = await response.json();
+    displayRecommended(json.data.products.edges);
+  }
+
+  function displayRecommended(products) {
+    const box = document.getElementById('youMayAlsoLike');
+    products.forEach((item) => {
+      const p = item.node;
+      box.innerHTML += `
+      <div style="width:200px; border:1px solid #ddd; padding:10px; border-radius:8px;">
+        <img src="${p.featuredImage?.url}" style="width:100%; border-radius:6px;" />
+        <h3 style="font-size:16px; margin:10px 0;">${p.title}</h3>
+        <p style="font-weight:bold;">₹${p.priceRange.minVariantPrice.amount}</p>
+      </div>
+    `;
+    });
+  }
+  getRecommendedProducts();
+</script> {% endcomment %}

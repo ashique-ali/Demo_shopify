@@ -1,0 +1,39 @@
+<!-- ✅ Toast snippet -->
+<div id="toast" class="toast"></div>
+
+<style>
+  .toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 12px 16px;
+    position: fixed;
+    z-index: 9999;
+    top: 20px; 
+    right: 20px; 
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .toast.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  window.showToast = function (message) {
+    const toast = document.getElementById('toast');
+    console.log("toast", toast)
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  };
+</script>

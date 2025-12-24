@@ -1,0 +1,16 @@
+<div class="product-card">
+  {% comment %} <a href="{{ product.url }}">
+    <img width="" height="" src="{{ product.featured_image | img_url: '400x' }}">
+  </a> {% endcomment %}
+
+  <button class="quick-view-btn" data-handle="{{ product.handle }}">
+    Quick View
+  </button>
+</div>
+
+<style>
+  .quick-view-btn {
+    position: absolute;
+    z-index: 999;
+  }
+</style>

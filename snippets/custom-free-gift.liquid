@@ -1,0 +1,106 @@
+<script>
+const FREE_GIFTS = [
+  {
+    threshold: {{ settings.gift_1 | default: 2000 }},
+    variant_id: Number("{{ settings.gift_variant_1 }}")
+  },
+  {
+    threshold: {{ settings.gift_2 | default: 3000 }},
+    variant_id: Number("{{ settings.gift_variant_2 }}")
+  },
+  {
+    threshold: {{ settings.gift_3 | default: 5000 }},
+    variant_id: Number("{{ settings.gift_variant_3 }}")
+  }
+];
+
+
+async function getCart() {
+  const res = await fetch('/cart.js');
+  return res.json();
+}
+
+async function renderGiftSections() {
+  const sections = ['cart-drawer', 'cart-icon-bubble'];
+  const res = await fetch(`/?sections=${sections.join(',')}`);
+  const html = await res.json();
+
+  if (html['cart-drawer']) {
+    const drawer = document.querySelector('#CartDrawer');
+    if (drawer) {
+      const doc = new DOMParser().parseFromString(html['cart-drawer'], 'text/html');
+      const newDrawer = doc.querySelector('#CartDrawer');
+      if (newDrawer) drawer.innerHTML = newDrawer.innerHTML;
+    }
+  }
+
+  if (html['cart-icon-bubble']) {
+    const bubble = document.querySelector('#cart-icon-bubble');
+    if (bubble) {
+      const doc = new DOMParser().parseFromString(html['cart-icon-bubble'], 'text/html');
+      const newBubble = doc.querySelector('.shopify-section');
+      if (newBubble) bubble.innerHTML = newBubble.innerHTML;
+    }
+  }
+
+  document.querySelector("cart-drawer")?.open();
+}
+
+async function addGift(variantId) {
+  await fetch('/cart/add.js', {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: variantId,
+      quantity: 1,
+      properties: { "_freeGift": "true" }
+    })
+  });
+  renderGiftSections();
+}
+
+async function removeGift(variantId) {
+  await fetch('/cart/update.js', {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      updates: { [variantId]: 0 }
+    })
+  });
+  renderGiftSections();
+}
+
+async function checkFreeGift() {
+  const cart = await getCart();
+  const cartTotal = cart.total_price / 100;
+
+  const eligibleGifts = FREE_GIFTS
+    .filter(g => cartTotal >= g.threshold && g.variant_id)
+    .map(g => g.variant_id);
+
+  const cartGifts = cart.items.filter(item =>
+    item.properties && item.properties._freeGift == "true"
+  );
+
+  for (let item of cartGifts) {
+    if (!eligibleGifts.includes(item.variant_id)) {
+      await removeGift(item.variant_id);
+    }
+  }
+
+  for (let variantId of eligibleGifts) {
+    const exists = cart.items.some(i => i.variant_id === variantId);
+    if (!exists) {
+      await addGift(variantId);
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", checkFreeGift);
+
+document.body.addEventListener('click', function (e) {
+  if (e.target.matches('[type="submit"], .add-to-cart, .product-form__submit')) {
+    setTimeout(checkFreeGift, 1200);
+  }
+});
+</script>

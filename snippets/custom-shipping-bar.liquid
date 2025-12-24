@@ -1,0 +1,138 @@
+{% assign cart_price = cart.total_price | divided_by: 100 %}
+{% assign gift1 = settings.gift_1 | plus: 0 %}
+{% assign gift2 = settings.gift_2 | plus: 0 %}
+{% assign gift3 = settings.gift_3 | plus: 0 %}
+
+{% assign next_target = 0 %}
+{% assign message = '' %}
+{% assign percent = 0 %}
+
+{% if cart_price < gift1 %}
+  {% assign next_target = gift1 %}
+  {% assign message = 'Add ₹' | append: next_target | minus: cart_price | append: ' more to unlock Free Gift 1 🎁' %}
+  {% assign percent = cart_price | times: 100 | divided_by: gift1 %}
+
+{% elsif cart_price < gift2 %}
+  {% assign next_target = gift2 %}
+  {% assign message = 'Add ₹' | append: next_target | minus: cart_price | append: ' more to unlock Free Gift 2 🎁🎁' %}
+  {% assign percent = cart_price | times: 100 | divided_by: gift2 %}
+
+{% elsif cart_price < gift3 %}
+  {% assign next_target = gift3 %}
+  {% assign message = 'Add ₹'
+    | append: next_target
+    | minus: cart_price
+    | append: ' more to unlock Free Gift 3 🎁🎁🎁'
+  %}
+  {% assign percent = cart_price | times: 100 | divided_by: gift3 %}
+
+{% else %}
+  {% assign message = '🎉 You have unlocked all rewards!!' %}
+  {% assign percent = 100 %}
+{% endif %}
+
+{% if cart.total_price > 0 %}
+  <div class="gift-progress-wrapper">
+    <p class="gift-progress-message">{{ message }}</p>
+    <div class="gift-progress-bar">
+      <span
+        class="gift-progress-fill {% if percent == 100 %}success{% endif %}"
+        style="width: {{ percent }}%"
+      >
+      </span>
+    </div>
+
+    {% comment %}
+      {% for item in cart.items %}
+        {% if item.price == 0 %}
+          <div class="cart-recommended">
+            {{ item.title }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endcomment %}
+    <div class="giftGrid">
+      {% for item in cart.items %}
+        {% if item.price == 0 %}
+          <div class="gift-levels">
+            <div class="gift-level {% if cart_price >= gift1 %}active{% endif %}">🎁{{ item.title -}}</div>
+            {% comment %}
+              <div class="gift-level {% if cart_price >= gift2 %}active{% endif %}">
+                {{ item.title -}}
+                <br>
+                ₹{{ gift2 }}
+              </div>
+              <div class="gift-level {% if cart_price >= gift3 %}active{% endif %}">
+                {{ item.title -}}
+                <br>
+                ₹{{ gift3 }}
+              </div>
+            {% endcomment %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+<style>
+    .gift-progress-wrapper {
+      {% comment %} margin: 15px 0; {% endcomment %}
+      padding-bottom: 10px;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+
+    .gift-progress-message {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .gift-progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #e4e4e4;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+  .giftGrid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+    .gift-progress-fill {
+      height: 10px;
+      background: linear-gradient(90deg, #ff4f4f, #c40000); /* RED gradient */
+      display: block;
+      transition: width 0.4s ease, background 0.4s ease;
+    }
+
+    .gift-progress-fill.success {
+      background: linear-gradient(90deg, #28a745, #0b7d2b); /* GREEN gradient */
+    }
+
+    .gift-levels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    .gift-level {
+      width: 100%;
+      padding: 6px;
+      font-size: 12px;
+      background: #eee;
+      border-radius: 6px;
+      opacity: 0.5;
+      font-weight: 600;
+    }
+
+    .gift-level.active {
+      background: #2eb511;
+      color: #fff;
+      opacity: 1;
+    }
+</style>

@@ -1,0 +1,86 @@
+{% comment %}
+  Size Chart Modal Popup Snippet
+  Shows table in a modal when button is clicked
+{% endcomment %}
+
+{% assign show_chart = false %}
+
+{% if product.tags contains 'size-chart-men' %}
+  {% assign chart_title = 'Men Size Chart' %}
+  {% assign chart_table = 
+    "S|Chest 36-38|Waist 30-32
+     M|Chest 39-41|Waist 33-35
+     L|Chest 42-44|Waist 36-38
+     XL|Chest 45-47|Waist 39-41" | split: "\n" %}
+  {% assign show_chart = true %}
+{% elsif product.tags contains 'size-chart-women' %}
+  {% assign chart_title = 'Women Size Chart' %}
+  {% assign chart_table = 
+    "S|Bust 32-34|Waist 24-26
+     M|Bust 35-37|Waist 27-29
+     L|Bust 38-40|Waist 30-32
+     XL|Bust 41-43|Waist 33-35" | split: "\n" %}
+  {% assign show_chart = true %}
+{% endif %}
+
+{% if show_chart %}
+  <!-- Trigger Button -->
+  <button id="size-chart-open" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mt-4">
+    Size Chart
+  </button>
+
+  <!-- Modal -->
+  <div id="size-chart-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-lg max-w-lg w-full p-6 relative">
+      <!-- Close Button -->
+      <button id="size-chart-close" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg">&times;</button>
+      <h4 class="text-xl font-semibold mb-4">{{ chart_title }}</h4>
+
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr>
+            <th class="border px-2 py-1">Size</th>
+            <th class="border px-2 py-1">Chest/Bust (in)</th>
+            <th class="border px-2 py-1">Waist (in)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in chart_table %}
+            {% assign columns = row | split: "|" %}
+            <tr class="{% cycle 'bg-white', 'bg-gray-100' %}">
+              {% for col in columns %}
+                <td class="border px-2 py-1">{{ col }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<div class="">
+ metaobject {% if product.metafields.custom.section_main %}{% endif %}
+</div>
+
+  <!-- JS -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const openBtn = document.getElementById("size-chart-open");
+      const closeBtn = document.getElementById("size-chart-close");
+      const modal = document.getElementById("size-chart-modal");
+
+      openBtn.addEventListener("click", function() {
+        modal.classList.remove("hidden");
+      });
+
+      closeBtn.addEventListener("click", function() {
+        modal.classList.add("hidden");
+      });
+
+      // Close modal when clicking outside content
+      modal.addEventListener("click", function(e) {
+        if(e.target === modal) modal.classList.add("hidden");
+      });
+    });
+  </script>
+{% endif %}

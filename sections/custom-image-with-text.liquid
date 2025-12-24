@@ -1,0 +1,172 @@
+<div class="page-width">
+  <div
+    class="row {{ section.settings.layout }} {{ section.settings.text_align }}"
+    style="
+      padding: {{ section.settings.padding_top }}px {{ section.settings.padding_right }}px {{ section.settings.padding_bottom }}px {{ section.settings.padding_left }}px;
+      margin: {{ section.settings.margin_top }}px {{ section.settings.margin_right }}px {{ section.settings.margin_bottom }}px {{ section.settings.margin_left }}px;
+    "
+  >
+    <div class="image_row">
+      {% if section.settings.image != blank %}
+        <img src="{{ section.settings.image | image_url: width: 800 }}" alt="{{ section.settings.title | escape }}">
+      {% endif %}
+    </div>
+
+    <div class="text_row" style="font-size: {{ section.settings.font_size }}px;">
+      {% if section.settings.title != blank %}
+        <h2>{{ section.settings.title }}</h2>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <p>{{ section.settings.description }}</p>
+      {% endif %}
+
+      {% if section.settings.btn_name != blank and section.settings.button_url != blank %}
+        <a
+          href="{{ section.settings.button_url }}"
+          class="btn"
+          style="background: {{ section.settings.btn_bg }}; color: {{ section.settings.btn_color }};"
+        >
+          {{ section.settings.btn_name }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  {% comment %}
+    {% assign number = 2 %}
+    {% for i in (1..10) %}
+      {{ number }} × {{ i }} = {{ number | times: i }}<br>
+    {% endfor %}
+  {% endcomment %}
+</div>
+
+{% schema %}
+{
+  "name": "Slideshow",
+  "tag": "section",
+  "class": "slideshow",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "row", "label": "Row" },
+        { "value": "row-reverse", "label": "Row Reverse" },
+        { "value": "column", "label": "Column" },
+        { "value": "column-reverse", "label": "Column Reverse" }
+      ],
+      "default": "row"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "text-left", "label": "Left" },
+        { "value": "text-center", "label": "Center" },
+        { "value": "text-right", "label": "Right" }
+      ],
+      "default": "text-left"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font Size (px)",
+      "min": 12,
+      "max": 48,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    { "type": "range", "id": "padding_top", "label": "Padding Top", "min": 0, "max": 100, "default": 20 },
+    { "type": "range", "id": "padding_right", "label": "Padding Right", "min": 0, "max": 100, "default": 20 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding Bottom", "min": 0, "max": 100, "default": 20 },
+    { "type": "range", "id": "padding_left", "label": "Padding Left", "min": 0, "max": 100, "default": 20 },
+
+    {
+      "type": "header",
+      "content": "Margin"
+    },
+    { "type": "range", "id": "margin_top", "label": "Margin Top", "min": 0, "max": 100, "default": 0 },
+    { "type": "range", "id": "margin_right", "label": "Margin Right", "min": 0, "max": 100, "default": 0 },
+    { "type": "range", "id": "margin_bottom", "label": "Margin Bottom", "min": 0, "max": 100, "default": 0 },
+    { "type": "range", "id": "margin_left", "label": "Margin Left", "min": 0, "max": 100, "default": 0 },
+
+    {
+      "type": "header",
+      "content": "Button Style"
+    },
+    { "type": "color", "id": "btn_bg", "label": "Button Background", "default": "#000000" },
+    { "type": "color", "id": "btn_color", "label": "Button Text Color", "default": "#ffffff" },
+
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "btn_name",
+      "label": "Button Title"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "custom-image-with-text"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+    .row {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .row.row-reverse {
+      flex-direction: row-reverse;
+    }
+    .row.column {
+      flex-direction: column;
+    }
+    .row.column-reverse {
+      flex-direction: column-reverse;
+    }
+    .text-left { text-align: left; }
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    .image_row, .text_row {
+      width: 50%;
+    }
+    .image_row img {
+    width: 100%
+  }
+</style>

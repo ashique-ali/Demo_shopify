@@ -1,0 +1,48 @@
+
+<div class="trust-badges">
+  {% if badge1_image and badge1_text %}
+    <div class="badge">
+      <img src="{{ badge1_image | asset_url }}" height="" width="" alt="{{ badge1_text }}">
+      <span>{{ badge1_text }}</span>
+    </div>
+  {% endif %}
+
+  {% if badge2_image and badge2_text %}
+    <div class="badge">
+      <img src="{{ badge2_image | asset_url }}" height="" width="" alt="{{ badge2_text }}">
+      <span>{{ badge2_text }}</span>
+    </div>
+  {% endif %}
+
+  {% if badge3_image and badge3_text %}
+    <div class="badge">
+      <img src="{{ badge3_image | asset_url }}" height="" width="" alt="{{ badge3_text }}">
+      <span>{{ badge3_text }}</span>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .trust-badges {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+  }
+
+  .trust-badges .badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f9f9f9;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #333;
+  }
+
+  .trust-badges .badge img {
+      width: 24px;
+      height: 24px;
+  }
+</style>

@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<div
+  id="wishlist-{{ productId }}"
+  class="wishlisticon wishlist_icon"
+  style="z-index: 1; background: none; border: none; cursor: pointer"
+>
+  <i class="fa-solid fa-heart" style="font-size: 18px"></i>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<style>
+   .toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: green;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 12px 16px;
+    position: fixed;
+    z-index: 9999;
+    left: 50%;
+    bottom: 30px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.4s ease, transform 0.20000s ease;
+  }
+
+  .toast.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .wishlist_icon.active {
+    color: red;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const wishlistButton = document.getElementById('wishlist-{{ productId }}');
+    const wishlistKey = 'wishID-{{ productId }}';
+    if (wishlistButton) {
+      if (localStorage.getItem(wishlistKey)) {
+        wishlistButton.classList.add('active');
+      }
+      wishlistButton.addEventListener('click', function () {
+        const wishlistKey = 'wishID-{{ productId }}';
+        if (localStorage.getItem(wishlistKey)) {
+          localStorage.removeItem(wishlistKey);
+          wishlistButton.classList.remove('active');
+          showToast('Product removed from your wishlist!');
+        } else {
+          localStorage.setItem(wishlistKey, '{{ productId }}');
+          wishlistButton.classList.add('active');
+          showToast('Product added to your wishlist!');
+        }
+      });
+    }
+  });
+
+    {% comment %} toast function  {% endcomment %}
+
+     window.showToast = function (message) {
+      const toast = document.getElementById('toast');
+      console.log("toast", toast)
+      if (!toast) return;
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    };
+</script>

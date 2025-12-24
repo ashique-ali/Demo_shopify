@@ -1,0 +1,25 @@
+<div class="cart-discount-box" data-section-id="{{ section.id }}">
+  <label class="text-sm font-medium">Discount Code</label>
+
+  <div style="display:flex; gap:10px; margin-top:5px;">
+    <input
+      type="text"
+      id="discount_code_"
+      name="discount_code"
+      placeholder="Discount code"
+      class="field__input"
+      style="flex: 1; border: 1px solid #ddd; padding: 8px; border-radius: 5px;"
+    >
+    <button
+      type="button"
+      id="apply_discount_btn"
+      class="button"
+      placeholder="Enter discount code"
+      style="background: black; color: white; border-radius: 100px; padding: 8px 16px;"
+    >
+      Apply
+    </button>
+  </div>
+  <p class="couponCode"></p>
+  <p id="discount_message_{{ section.id }}" style="margin-top:6px; font-size:13px;"></p>
+</div>

@@ -1,0 +1,89 @@
+{% layout none %}
+<div class="qv-wrapper">
+  <div class="qv-slider">
+    {% for img in product.images %}
+      <img width="" height="" src="{{ img | img_url: '800x' }}" class="qv-slide-img">
+    {% endfor %}
+  </div>
+
+  <div class="qv-details">
+    <h2>{{ product.title }}</h2>
+    <div class="price_container">
+      <p id="qv-price">{{ product.selected_or_first_available_variant.price | money }}</p>
+      <p class="compare_at_price">{{ product.compare_at_price | money }}</p>
+    </div>
+    
+    {% if product.variants.size > 1 %}
+      <label style="font-weight: 600;">Size :</label>
+      <div>
+        <select id="qv-variants">
+          {% for variant in product.variants %}
+            <option
+              value="{{ variant.id }}"
+              {% if variant == product.selected_or_first_available_variant %}
+                selected
+              {% endif %}
+              {% unless variant.available %}
+                disabled
+              {% endunless %}
+            >
+              {{ variant.title }} — {{ variant.price | money }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    {% endif %}
+
+    <div class="addTo_Cart_Button">
+      <label style="font-weight: 600;">Quantity</label>
+      <div class="quantity_Wrapper">
+        <div>
+          {% render 'quantity-input', variant: product.selected_or_first_available_variant, min: 1 %}
+        </div>
+        <div class="cart_wrapper">
+          {% if product.available %}
+            <button id="qv-add-cart">Add to Cart</button>
+          {% else %}
+            <button id="qv-add-cart" disabled>Sold out</button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .qv-wrapper { display: flex; gap: 20px; }
+  .qv-slider img { width: 350px; display: block; margin-bottom: 15px; }
+</style>
+
+{% comment %} <script>
+  $(document).on('click', '#qv-add-cart', function () {
+    var variantId = $('#qv-variants').val() || $('option[selected]').val();
+    if (!variantId) {
+      alert('Please select a variant');
+      return;
+    }
+    var formObj = {
+      id: variantId,
+      quantity: 1,
+    };
+    $.ajax({
+      type: 'POST',
+      url: '/cart/add.js',
+      cache: false,
+      data: formObj,
+      dataType: 'json',
+      success: function (data) {
+        $('.cartbtnicon').click();
+        $('cart-drawer').removeClass('is-empty');
+        $('.drawer__inner-empty').hide();
+        $('.cart-drawer').load(location.href + ' #CartDrawer');
+        $('#cart-icon-bubble').load(location.href + ' #cart-icon-bubble');
+      },
+      error: function (xhr, ajaxOption, thrownError) {
+        console.log('Error:', error);
+      },
+    });
+  });
+</script> {% endcomment %}

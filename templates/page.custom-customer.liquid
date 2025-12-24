@@ -1,0 +1,171 @@
+{% comment %}
+  {% for product in collections.all.products %}
+    {% assign parts = product.price | split: ',' %}
+    <li>
+      {% for price in parts %}
+        {{ price }}
+      {% endfor %}
+    </li>
+  {% endfor %}
+
+  ====================================
+
+  {% comment %}
+    {% for product in collections.all.products %}
+      {% if product.min_price >= 0 and product.price < 120%}
+        {{ product.title }}
+      {% endif %}
+    {% endfor %}
+  {% endcomment %}
+
+  {% comment %}
+    {% for product in collections.all.products %}
+      {% if product.price_min >= 0 and product.price_min < 12000 %}
+        {{ product.title -}}
+        <br>
+      {% endif %}
+    {% endfor %}
+  {% endcomment %}
+
+  {% for product in collections.all.products %}
+    {% if product.compare_at_price > product.price %}
+      {% assign discount = product.compare_at_price | minus: product.price %}
+      {% assign discount_times_100 = discount | times: 100 %}
+      {% assign percent = discount_times_100 | divided_by: product.compare_at_price %}
+      {{ percent | round }}% OFF
+    {% endif %}
+  {% endfor %}
+{% endcomment %}
+
+{% comment %}
+  <div>
+    {% for item in cart.items %}
+      <p>Price : {{ item.price | money }}</p>
+      <p>Title: {{ item.title }}</p>
+      <p>line_price : {{ item.line_price | money }}</p>
+      <p>Qty: {{ item.quantity }}</p>
+    {% endfor %}
+  </div>
+{% endcomment %}
+
+{% comment %}
+  <div class="pdpGrid">
+    {% for product in collections.all.products %}
+      <div
+        class="{% if product.available == false %}out_of_stock{% endif %}"
+      >
+        <div>
+          <img width="" height="" src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+        </div>
+        Tag: {{ product.tags | join: ', ' }}
+        <div>
+          <p
+            class="
+              {% if product.title == 'nikker' %}
+                nikkerClass
+              {% endif %}
+            "
+          >
+            {{ product.title | replace: '-', ' ' }}
+          </p>
+
+          {% if product.description.length > 5 %}
+            {{ product.description | truncate: 5 }}
+            <a href="{{ product.url }}">Read More</a>
+          {% else %}
+            {{ product.description }}
+          {% endif %}
+
+          {% comment %} {{ product.handle | split: "-" | first }} {% endcomment %}
+          <br>
+          {% comment %} <p>{{ product.description | truncate: 10 }}</p> {% endcomment %}
+          {% comment %} add gst  {% endcomment %}
+          <b>{{ product.price | times: 1.10 | round | money }}</b>
+          <div style="text-align: end">
+            {% if product.compare_at_price > product.price %}
+              {% assign discount = product.compare_at_price | minus: product.price %}
+              {% assign percent = discount | times: 100 | divided_by: product.compare_at_price %}
+              {{ percent | round }}% OFF
+              {% if percent > 50 %}
+                <div class="mega-sale-badge">Mega Sale</div>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+
+        {% if product.available %}
+          <button>Add to cart</button>
+        {% else %}
+          <button disabled>Out of stock</button>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endcomment %}
+
+{% comment %}
+  <style>
+    .pdpGrid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      width: 90%;
+      margin: auto;
+    }
+    .out_of_stock {
+      order:1;
+    }
+    .pdpGrid img {
+      width: 100%;
+    }
+  </style>
+{% endcomment %}
+
+{% comment %}
+  {% assign all_tags = '' | split: ',' %}
+
+  {% for product in collections.all.products %}
+    {% for tag in product.tags %}
+      {% unless all_tags contains tag %}
+        {% assign all_tags = all_tags | join: ',' | append: ',' | append: tag | split: ',' %}
+      {% endunless %}
+    {% endfor %}
+  {% endfor %}
+
+  <div class="tag-filters">
+    {% for tag in all_tags %}
+      {% if tag != "" %}
+        <button class="filter-button" data-tag="{{ tag | handleize }}">
+          {{ tag }}
+        </button>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <style>
+  .tag-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .filter-button {
+    padding: 5px 10px;
+    border: 1px solid #333;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+
+  .filter-button:hover {
+    background: #333;
+    color: #fff;
+  }
+  </style>
+{% endcomment %}
+
+
+<!-- Collection Tabs -->
+
+

@@ -1,0 +1,39 @@
+{% comment %} <div class="collection_cart-button">
+  {% for variant in product.variants %}
+    <input type="hidden" id="variantgetid" value="{{ variant.id }}">
+  {% endfor %}
+  <button type="button" name="add" id="collection-cart-{{ product.id }}" style="position: absolute; z-index: 999">
+    {% if product.available == true %}
+      <span> Add to cart </span>
+    {% else %}
+      <span>Sold Out</span>
+    {% endif %}
+  </button>
+</div>
+
+<script>
+  $(document).on('click', '#collection-cart-{{ product.id }}', function () {
+    let variantId = $(this).parents('.collection_cart-button').find('#variantgetid').val();
+    let formObj = {
+      id: variantId,
+      quantity: 1,
+    };
+    $.ajax({
+      type: 'POST',
+      url: '/cart/add.js',
+      cache: false,
+      data: formObj,
+      dataType: 'json',
+      success: function (data) {
+        $('.cartbtnicon').click();
+        $('cart-drawer').removeClass('is-empty');
+        $('.drawer__inner-empty').hide();
+        $('.cart-drawer').load(location.href + ' #CartDrawer');
+        $('#cart-icon-bubble').load(location.href + ' #cart-icon-bubble');
+      },
+      error: function (xhr, ajaxOption, thrownError) {
+        console.log('Error:', error);
+      },
+    });
+  });
+</script> {% endcomment %}

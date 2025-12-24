@@ -1,0 +1,111 @@
+<!-- ============================= -->
+<!--   GSAP Animated Hero Section  -->
+<!-- ============================= -->
+
+<section class="gsap-hero-section">
+  <div class="container">
+    <h1 class="hero-title">{{ section.settings.title }}</h1>
+    <p class="hero-sub">{{ section.settings.subtitle }}</p>
+    <a href="{{ section.settings.button_link }}" class="hero-btn">
+      {{ section.settings.button_label }}
+    </a>
+  </div>
+</section>
+
+<style>
+.gsap-hero-section {
+  padding: 100px 20px;
+  text-align: center;
+  background: #f5f5f5;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.hero-sub {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.hero-btn {
+  background: #000;
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s ease;
+}
+
+.hero-btn:hover {
+  background: #333;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  gsap.from(".hero-title", {
+    opacity: 0,
+    y: 50,
+    duration: 1
+  });
+
+  gsap.from(".hero-sub", {
+    opacity: 0,
+    y: 30,
+    duration: 1,
+    delay: 0.3
+  });
+
+  gsap.from(".hero-btn", {
+    opacity: 0,
+    scale: 0.5,
+    duration: 0.8,
+    delay: 0.6,
+    ease: "back.out(1.7)"
+  });
+
+});
+</script>
+
+<!-- Section Settings -->
+
+{% schema %}
+{
+  "name": "GSAP Animated Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Welcome to Our Store"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "The best products are waiting for you"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "GSAP Animated Hero"
+    }
+  ]
+}
+{% endschema %}

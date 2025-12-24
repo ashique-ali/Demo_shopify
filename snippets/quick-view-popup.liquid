@@ -1,0 +1,30 @@
+<div id="QuickViewModal" class="qv-modal">
+  <div class="qv-content">
+    <button id="qv-close">×</button>
+    <div id="qv-body">Loading...</div>
+  </div>
+</div>
+
+<style>
+  .qv-modal {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    justify-content: center; align-items: center;
+    z-index: 99999;
+  }
+  .qv-content {
+        background: #fff;
+    width: 800px;
+    padding: 20px;
+    position: relative;
+    max-height: 400px;
+    height: 100%;
+    overflow-y: scroll;
+  }
+  #qv-close {
+    position: absolute; top: 10px; right: 10px;
+    border: none; background: none; font-size: 25px;
+    cursor: pointer;
+  }
+</style>

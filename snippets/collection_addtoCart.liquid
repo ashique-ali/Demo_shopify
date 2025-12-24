@@ -1,0 +1,46 @@
+{% comment %} <div class="collection-cart">
+  {% for variant in product.variants %}
+    <div class="variant-container">
+      <input type="hidden" class="variant-id" value="{{ variant.id }}">
+      <button class="collection-add-to-cart" id="collection-cartId-{{ product.id }}" data-variant-id="{{ variant.id }}">
+        Add to cart
+      </button>
+    </div>
+  {% endfor %}
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+
+<script>
+  document.querySelectorAll('.collection-add-to-cart').forEach((item) => {
+    item.addEventListener('click', (e) => {
+      const variantId = e.target.getAttribute('data-variant-id');
+      console.log("variantId", variantId);
+       let formObj = {
+        quantity: 1,
+        id: variantId
+    }
+    $.ajax({
+        type: 'POST',
+        url: '/cart/add.js',
+        cache: false,
+        data: formObj,
+        dataType: "json",
+        success: functtion(data){
+            console.log("console");
+        },
+        error: function(xhr, status, error) {
+          console.log("Error adding item to cart:", error);
+        }
+    })
+    });
+  });
+</script>
+
+<style>
+  .collection-add-to-cart {
+    position: absolute;
+    z-index: 999;
+  }
+</style> {% endcomment %}

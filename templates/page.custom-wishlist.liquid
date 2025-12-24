@@ -1,0 +1,316 @@
+{% comment %}
+  <div class="page-width">
+    <h2>Wishlist</h2>
+    <div class="wishlist_row"></div>
+  </div>
+
+  <div class="page-width">
+    {% if product == false %}
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>product Image</th>
+            <th>Price</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in collections.all.products %}
+            <tr>
+              <td>{{ product.title }}</td>
+              <td>
+                <img width="" height="" src="{{ product.featured_image | image_url}}" alt="{{ product.title }}">
+              </td>
+              <td>{{ product.price | money }}</td>
+              <td>
+                {{ product.description | truncatewords: 10 }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+    {% comment %}
+      {% assign num = 12 %}
+      {% assign num2 = 6 %}
+      {{ num | times: num2 }}
+    {% endcomment %}
+
+    <div>
+      {% assign num = 4 %}
+      {% for i in (1..10) %}
+        {{ num }} x {{ i }} = {{ num | times: i }}
+      {% endfor %}
+    </div>
+
+    <div>
+      {% assign number1 = 60 %}
+      {% assign number2 = 40 %}
+      {% if number1 > number2 and number1 == number2 %}
+        numbers are equals
+      {% else %}
+        number are not equals
+      {% endif %}
+    </div>
+
+    <div>
+      {% if page.title == 'wishlist' %}
+        <p>wishlist page</p>
+      {% else %}
+        <h2>No wishlist page</h2>
+      {% endif %}
+    </div>
+
+    <div>
+      {% unless page.title == 'wishlist' %}
+        <p>true</p>
+      {% else %}
+        <b>false</b>
+      {% endunless %}
+    </div>
+
+    <div>
+      {% for i in (1..5) %}
+        {% if i == 2 %}
+          {% continue %}
+        {% else %}
+          {{ i }}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  {% comment %} Array method  {% endcomment %}
+
+  <div class="page-width">
+    {% comment %}
+      {% assign fruits = "apple, banana, orange, mango" | split: "," %}
+      {{ fruits | join : ' and'}}
+      {% for item in fruits %}
+        <li>{{ item }}</li>
+      {% endfor %}
+    {% endcomment %}
+  </div>
+
+  {% comment %}
+    <div class="page-width">
+      {% assign fruits = 'apple, banana, orange, mango' | split: ',' %}
+      <b>{{ fruits | reverse }}</b>
+    </div>
+  {% endcomment %}
+
+  {% comment %}
+    <div class="page-width">
+      {% assign name = "Ashiq, Sumit, Faiz, Isha" | split: ', ' %}
+      {% comment %} {{ name | sort | join: " , " }} {% endcomment %}
+       {{ name.size }}
+    </div>
+  {% endcomment %}
+
+  <div class="page-width">
+    <div>
+      {% assign city = 'Noida, Ghaziabad, Delhi, Kanpur, Noida, Delhi' | split: ', ' %}
+      <b>{{ city | uniq | join: ', ' }}</b>
+    </div>
+    <div>
+      {% assign my_array = 'apple,banana,orange,apple' | split: ', ' %}
+      {{ my_array | uniq }}
+    </div>
+
+    {% comment %} sordet by title price  {% endcomment %}
+    <div>
+      {% assign sorted_products = collections.all.products | sort: 'price' %}
+
+      {% for product in sorted_products %}
+        {{ product.title }} - {{ product.price | money }}
+      {% endfor %}
+    </div>
+    {% comment %} end sordet by title price  {% endcomment %}
+
+    ========================================
+
+    <div>
+      {% for product in collections.all.products %}
+        {% if product.available and product.tags contains 'shirt' and product.price > 700 %}
+          {{ product.title }}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  {% comment %} End Array method  {% endcomment %}
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const wishlistContainer = document.querySelector(".wishlist_row");
+      {% for product in collections.all.products %}
+      var wishlist_Id = localStorage.getItem("wishID-{{ product.id }}");
+      if (wishlist_Id == "{{ product.id }}") {
+        const wishgridHTML = `
+          <div class="wishlist-grid">
+          <span id="removeIcon" class="remove-{{ product.id }}">XRemove</span>
+            <a href="{{ product.url }}">
+              <img src="{{ product.featured_image | image_url: width: , height:  }}" alt="{{ product.title }}">
+            </a>
+            <h4>{{ product.title }}</h4>
+            <p>{{ product.price | money }}</p>
+          </div>
+        `;
+        wishlistContainer.insertAdjacentHTML("beforeend", wishgridHTML);
+          const removeIcons = document.querySelector(".remove-{{ product.id }}");
+          removeIcons.addEventListener('click', function (e) {
+          e.target.closest(".wishlist-grid").remove();
+          localStorage.removeItem('wishID-{{ product.id }}');
+        });
+      }
+    {% endfor %}
+  });
+  </script>
+
+  <style>
+    #removeIcon {
+      background: red;
+      color: #fff;
+      padding: 2px 5px;
+      border-radius: 5px;
+    }
+      #removeIcon:hover {
+        cursor: pointer;
+      }
+    .wishlist_row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    .wishlist-grid {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    .wishlist-grid img {
+      width: 100%;
+      display: block;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .wishlist-grid h4, p {
+      margin: 0px;
+      margin-top: 10px;
+      }
+  </style>
+
+  {% comment %} practice  {% endcomment %}
+  <div class="page-width">
+    ***********************************************
+
+  {% assign selected_tag = 'Cotton' %}
+  {% assign min_price = 500 | times: 100 %}
+  {% assign max_price = 1500 | times: 100 %}
+
+  <h2>Filtered Products</h2>
+
+  {% assign all_products = collections.all.products %}
+
+  {% for product in all_products %}
+    {{ product.title }}
+
+    {% if product.price >= min_price and product.price <= max_price %}
+      {% if product.tags contains selected_tag %}
+        <div style="margin-bottom:20px;">
+          <p>{{ product.title }}</p>
+          <p>Price: {{ product.price | money }}</p>
+          <p>Tags:
+            {{ product.tags | join: ', ' }}
+          </p>
+        </div>
+      {% endif %}
+
+    {% endif %}
+
+  {% endfor %}
+
+
+  </div>
+{% endcomment %}
+
+{% comment %}
+  {% for product in collections.all.products %}
+    <div class="product-card">
+      <img src="{{ product.featured_image | img_url: '100x' }}" alt="{{ product.title }}" width="" height="">
+      <h3>{{ product.title }}</h3>
+      <p>{{ product.price | money }}</p>
+      <b>{{ product.description | strip_html | truncate: 10 }}</b>
+    </div>
+  {% endfor %}
+{% endcomment %}
+
+{% if cart.item_count == 0 %}
+  <b>Your Cart is Empty</b>
+{% else %}
+  <b>Your Item</b>
+{% endif %}
+
+{% for item in cart.items %}
+  <p>{{ item.product.title }} × {{ item.quantity }}</p>
+{% endfor %}
+
+<p>Total: {{ cart.total_price | money }}</p>
+
+{% for item in cart.items %}
+  <p>
+    {% comment %} {{ item.product.title }}   {% endcomment %}
+    {% comment %} ({{ item.quantity }} × {{ item.price | money }})   {% endcomment %}
+    = {{ item.line_price | money }}
+  </p>
+{% endfor %}
+
+<p>Total Quantity: {{ cart.item_count }}</p>
+=================================================
+{% if cart.total_price >= 99900 %}
+  <p class="free-shipping">🎉 Congratulations! You qualify for free shipping.</p>
+{% else %}
+  {% assign remaining = 99900 | minus: cart.total_price %}
+  <p class="free-shipping">Add {{ remaining | money }} more to get free shipping.</p>
+{% endif %}
+
+{% for item in cart.items %}
+  {% if item.variant.compare_at_price > item.price %}
+    {% assign discount = item.variant.compare_at_price | minus: item.price %}
+    {% assign discount_percent = discount | times: 100 | divided_by: item.variant.compare_at_price %}
+
+    <p>({{ discount_percent }}% OFF)</p>
+  {% else %}
+    <p>{{ item.product.title }} – {{ item.price | money }}</p>
+  {% endif %}
+{% endfor %}
+
+{% for item in cart.items %}
+  <div class="cart-item">
+    {% if item.image %}
+      <img
+        src="{{ item.image | img_url: '100x' }}"
+        alt="{{ item.product.title }}"
+      >
+    {% endif %}
+
+    <p>{{ item.product.title }}</p>
+    <p>Qty: {{ item.quantity }}</p>
+  </div>
+{% endfor %}
+
+{% for item in cart.items %}
+  <div class="cart-item">
+    <a href="/cart/change?line={{ forloop.index }}&quantity=0"> Remove </a>
+  </div>
+{% endfor %}
+
+{% for item in cart.items %}
+  <div>
+    {% if item.product.vendor == "Half Paint" %}
+      <p>dfghjkl</p>
+      {% endif %}
+  </div>
+{% endfor %}
