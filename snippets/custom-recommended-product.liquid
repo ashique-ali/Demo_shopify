@@ -2,11 +2,9 @@
 
   {% assign page_title = 'Recommanded product' %}
   <div>
-    {% if page_title != 'Recommanded product' %}
       <div>
         <h3 class="title">{{ page_title }}</h3>
       </div>
-    {% endif %}
     <div class="cart-recommended">
       {% for item in cart.items %}
         {% assign collection = item.product.metafields.custom.recommended_products.value %}
