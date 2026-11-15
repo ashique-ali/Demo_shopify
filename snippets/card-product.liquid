@@ -302,7 +302,7 @@
           <div class="quick-add no-js-hidden">
             {%- liquid
               assign qty_rules = false
-              if card_product.selected_or_first_available_variant.quantity_rule.min > 1 or card_product.selected_or_first_available_variant.quantity_rule.max != null or card_product.selected_or_first_available_variant.quantity_rule.increment > 1
+              if card_product.selected_or_first_available_variant.quantity_rule.min > 100 or card_product.selected_or_first_available_variant.quantity_rule.max != null or card_product.selected_or_first_available_variant.quantity_rule.increment > 1
                 assign qty_rules = true
               endif
             -%}
