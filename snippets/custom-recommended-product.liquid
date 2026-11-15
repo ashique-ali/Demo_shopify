@@ -1,4 +1,4 @@
-
+{% comment %} 
 
   {% comment %} {% assign page_title = 'Recommanded product' %}
   <div>
@@ -103,4 +103,18 @@
         min-width: 130px !important;
     }
   </style> {% endcomment %}
+ {% endcomment %}
 
+ {% for item in cart.items %}
+
+  <h3>Cart Product: {{ item.product.title }}</h3>
+
+  {% assign recommended_products = item.product.metafields.custom.recommended_products.value %}
+
+  <p>Recommended Count: {{ recommended_products.size }}</p>
+
+  {% for product in recommended_products %}
+    <p>Recommended: {{ product.title }}</p>
+  {% endfor %}
+
+{% endfor %}
