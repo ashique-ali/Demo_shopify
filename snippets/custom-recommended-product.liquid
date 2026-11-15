@@ -1,10 +1,12 @@
-{% comment %} 
 
-  {% comment %} {% assign page_title = 'Recommanded product' %}
+
+  {% assign page_title = 'Recommanded product' %}
   <div>
+    {% if page_title != 'Recommanded product' %}
       <div>
         <h3 class="title">{{ page_title }}</h3>
       </div>
+    {% endif %}
     <div class="cart-recommended">
       {% for item in cart.items %}
         {% assign collection = item.product.metafields.custom.recommended_products.value %}
@@ -24,68 +26,9 @@
         {% endfor %}
       {% endfor %}
     </div>
-  </div> {% endcomment %}
-
-
-{% assign page_title = 'Recommended Products' %}
-
-{% assign all_recommended_products = '' | split: ',' %}
-
-{% for item in cart.items %}
-
-  {% assign recommended_products = item.product.metafields.custom.recommended_products.value %}
-
-  {% assign all_recommended_products = all_recommended_products | concat: recommended_products %}
-
-{% endfor %}
-
-{% assign unique_products = all_recommended_products | uniq %}
-
-<div>
-
-  <h3 class="title">{{ page_title }}</h3>
-
-  <div class="cart-recommended">
-
-    {% for product in unique_products %}
-
-      {% render 'duplication-recommanded-grid',
-        card_product: product,
-        media_aspect_ratio: section.settings.image_ratio,
-        image_shape: section.settings.image_shape,
-        show_secondary_image: section.settings.show_secondary_image,
-        show_vendor: section.settings.show_vendor,
-        show_rating: section.settings.show_rating,
-        lazy_load: lazy_load,
-        skip_styles: skip_card_product_styles,
-        quick_add: section.settings.quick_add,
-        section_id: section.id
-      %}
-    {% endfor %}
   </div>
-</div>
 
-<style>
-  .cart-recommended {
-    display: flex;
-    gap: 12px;
-    overflow-x: scroll;
-  }
-
-  .title {
-    margin: 0;
-    margin-bottom: 8px;
-    margin-top: 20px;
-  }
-
-  .cart-recommended .card-wrapper.product-card-wrapper.underline-links-hover {
-    width: 100%;
-    min-width: 130px !important;
-  }
-</style>
-
-  
-  {% comment %} <style>
+  <style>
     .cart-recommended {
         display: flex;
         gap: 12px;
@@ -102,19 +45,5 @@
         width: 100%;
         min-width: 130px !important;
     }
-  </style> {% endcomment %}
- {% endcomment %}
+  </style>
 
- {% for item in cart.items %}
-
-  <h3>Cart Product: {{ item.product.title }}</h3>
-
-  {% assign recommended_products = item.product.metafields.custom.recommended_products.value %}
-
-  <p>Recommended Count: {{ recommended_products.size }}</p>
-
-  {% for product in recommended_products %}
-    <p>Recommended: {{ product.title }}</p>
-  {% endfor %}
-
-{% endfor %}
