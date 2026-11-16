@@ -212,7 +212,7 @@
 
             {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
             {%- if card_product.quantity_price_breaks_configured? -%}
-              {% if card_product.variants_count == 100 and quick_add == 'bulk' %}
+              {% if card_product.variants_count == 1 and quick_add == 'bulk' %}
                 {% liquid
                   assign quantity_rule = card_product.selected_or_first_available_variant.quantity_rule
                   assign has_qty_rules = false
