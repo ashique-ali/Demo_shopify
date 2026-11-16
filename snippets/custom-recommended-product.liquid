@@ -1,26 +1,16 @@
-
-{% assign page_title = 'Recommended product' %}
-{% assign seen = '' %}
-
-{% for item in cart.items %}
-  {% assign collection = item.product.metafields.custom.recommended_products.value %}
-
-  {% if collection != blank %}
-
-    <h3 class="title">{{ page_title }}</h3>
-
+  {% assign page_title = 'Recommanded product' %}
+  {% assign seen = '' %}
+  <div>
+      <div>
+        <h3 class="title">{{ page_title }}</h3>
+      </div>
     <div class="cart-recommended">
-
       {% for item in cart.items %}
         {% assign collection = item.product.metafields.custom.recommended_products.value %}
-
         {% for product in collection %}
-
           {% assign pid = product.id | append: ',' %}
-
           {% unless seen contains pid %}
             {% assign seen = seen | append: pid %}
-
             {% render 'duplication-recommanded-grid',
               card_product: product,
               media_aspect_ratio: section.settings.image_ratio,
@@ -33,17 +23,11 @@
               quick_add: 'standard',
               section_id: section.id
             %}
-
           {% endunless %}
         {% endfor %}
       {% endfor %}
-
     </div>
-
-    {% break %}
-  {% endif %}
-{% endfor %}
-
+  </div>
 
   <style>
     
