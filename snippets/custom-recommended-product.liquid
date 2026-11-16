@@ -9,6 +9,7 @@
         {% assign collection = item.product.metafields.custom.recommended_products.value %}
         {% for product in collection %}
           {% assign pid = product.id | append: ',' %}
+          {{ pid }}ll
           {% unless seen contains pid %}
             {% assign seen = seen | append: pid %}
             {% render 'duplication-recommanded-grid',
