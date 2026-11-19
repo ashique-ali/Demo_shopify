@@ -1,15 +1,16 @@
-  {% assign page_title = 'Recommanded product' %}
-  {% assign seen = '' %}
+{% assign page_title = 'Recommanded product' %}
+{% assign seen = '' %}
+
+<div>
   <div>
-      <div>
-        <h3 class="title">{{ page_title }}</h3>
-      </div>
-    <div class="cart-recommended">
-      {% for item in cart.items %}
-        {% assign collection = item.product.metafields.custom.recommended_products.value %}
-        {% for product in collection %}
+    <h3 class="title">{{ page_title }}</h3>
+  </div>
+  <div class="cart-recommended">
+    {% for item in cart.items %}
+      {% assign collection = item.product.metafields.custom.recommended_products.value %}
+      {% for product in collection %}
+        {% if product.available %}
           {% assign pid = product.id | append: ',' %}
-          {{ pid }}ll
           {% unless seen contains pid %}
             {% assign seen = seen | append: pid %}
             {% render 'duplication-recommanded-grid',
@@ -25,117 +26,8 @@
               section_id: section.id
             %}
           {% endunless %}
-        {% endfor %}
+        {% endif %}
       {% endfor %}
-    </div>
+    {% endfor %}
   </div>
-
-  <style>
-    
-.cart-recommended {
-  display: flex;
-  gap: 18px;
-  overflow-x: auto;
-  align-items: stretch;
-  padding: 5px 2px 15px;
-  scroll-behavior: smooth;
-}
-
-.cart-recommended > .card-wrapper {
-  flex: 0 0 180px !important;
-  width: 180px !important;
-  min-width: 180px !important;
-  display: flex;
-}
-
-.cart-recommended .card {
-  width: 100%;
-  height: 100%;
-  border: 1px solid #e5e5e5;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.07);
-}
-
-/* Image */
-.cart-recommended .card__inner {
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.cart-recommended .card__media {
-  aspect-ratio: 1 / 1 !important;
-}
-
-.cart-recommended .card__media img {
-  object-fit: cover;
-}
-
-/* Content */
-.cart-recommended .card__content {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  padding: 12px;
-}
-
-.cart-recommended .card__heading {
-  font-size: 15px;
-  line-height: 1.4;
-  min-height: 42px;
-}
-
-/* Price */
-.cart-recommended .price {
-  margin-top: 8px;
-}
-
-.cart-recommended .price-item {
-  font-size: 18px;
-  font-weight: 700;
-}
-
-/* Add to cart */
-.cart-recommended .quick-add {
-  margin-top: auto;
-  padding-top: 12px;
-}
-
-.cart-recommended .quick-add__submit {
-  min-height: 48px;
-  border-radius: 30px;
-  background: #000;
-  color: #fff;
-  font-size: 15px;
-}
-
-/* Heading */
-.title {
-  margin: 20px 0 10px;
-  font-size: 23px;
-  font-weight: 500;
-}
-
-/* Scrollbar */
-.cart-recommended::-webkit-scrollbar {
-  height: 7px;
-}
-
-.cart-recommended::-webkit-scrollbar-thumb {
-  background: #999;
-  border-radius: 20px;
-}
-
-@media screen and (max-width: 749px) {
-  .cart-recommended {
-    gap: 12px;
-  }
-
-  .cart-recommended > .card-wrapper {
-    flex: 0 0 165px !important;
-    width: 165px !important;
-    min-width: 165px !important;
-  }
-}
-
-  </style>
+</div>
