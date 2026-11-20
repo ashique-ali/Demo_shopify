@@ -1,0 +1,32 @@
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign form_id = 'collection-form-' | append: product.id %}
+
+<div class="custom-collection-variant">
+
+  <form action="/cart/add" method="post" id="{{ form_id }}">
+
+    <select name="id" class="variant-select">
+
+      {% for variant in product.variants %}
+
+        <option
+          value="{{ variant.id }}"
+          {% if variant.id == current_variant.id %}selected{% endif %}
+          {% unless variant.available %}disabled{% endunless %}
+        >
+          {{ variant.title }}
+          {% unless variant.available %} - Sold Out{% endunless %}
+        </option>
+
+      {% endfor %}
+
+    </select>
+
+    <button type="submit" class="add-cart-btn">
+      Add to cart
+    </button>
+
+  </form>
+
+</div>
