@@ -310,61 +310,15 @@
           {% comment %} variants swatech  {% endcomment %}
 
 <div class="variant-box">
-  
-{% assign color_index = nil %}
-
-{% for option_name in card_product.options %}
-  {% if option_name == 'Color' %}
-    {% assign color_index = forloop.index0 %}
-  {% endif %}
-{% endfor %}
-
-{% if color_index != nil %}
-
-  <div class="variant-box">
-
-    {% for color in card_product.options_by_name['Color'].values %}
-
-      {% assign color_variant = blank %}
-      {% assign color_image = blank %}
-      {% assign color_downcase = color | downcase %}
-
-      {% for variant in card_product.variants %}
-        {% if variant.options[color_index] == color %}
-          {% assign color_variant = variant %}
-          {% break %}
-        {% endif %}
-      {% endfor %}
-
-      {% for media in card_product.media %}
-        {% assign media_alt = media.alt | downcase %}
-
-        {% if media_alt contains color_downcase %}
-          {% assign color_image = media.preview_image | image_url: width: 600 %}
-          {% break %}
-        {% endif %}
-      {% endfor %}
-
-      {% if color_variant != blank %}
-        <button
-          type="button"
-          class="variant-btn"
-          data-variant-id="{{ color_variant.id }}"
-          data-image="{{ color_image }}"
-          data-color="{{ color | escape }}"
-          title="{{ color }}"
-          {% unless color_variant.available %}disabled{% endunless %}
-        >
-          {{ color }}
-        </button>
-      {% endif %}
-
-    {% endfor %}
-
-  </div>
-
-{% endif %}
-
+  {% for variant in card_product.variants %}
+    <button
+      type="button"
+      class="variant-btn"
+      data-image="{{ variant.image | image_url: width: 600 }}"
+    >
+      {{ variant.title }}
+    </button>
+  {% endfor %}
 </div>
 
 {% comment %} end variants swatches {% endcomment %}
@@ -675,34 +629,3 @@
     </div>
   </div>
 {%- endif -%}
-
-
-<style>
-
-.variant-box {
-  display: flex;
-  gap: 8px;
-  margin: 12px 0;
-  flex-wrap: wrap;
-}
-
-.variant-btn {
-  padding: 8px 14px;
-  border: 1px solid #ccc;
-  border-radius: 50px;
-  background: white;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.variant-btn.active {
-  border: 2px solid black;
-  font-weight: bold;
-}
-
-.variant-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-</style>
