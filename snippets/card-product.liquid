@@ -675,3 +675,34 @@
     </div>
   </div>
 {%- endif -%}
+
+
+<style>
+
+.variant-box {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.variant-btn {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.variant-btn.active {
+  border: 2px solid black;
+  font-weight: bold;
+}
+
+.variant-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+</style>
