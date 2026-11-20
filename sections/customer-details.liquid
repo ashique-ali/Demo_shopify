@@ -1,6 +1,4 @@
-
 {% if customer %}
-
   <!-- 1. Login / Logout Button -->
   <a href="{{ routes.account_logout_url }}">Logout</a>
 
@@ -24,23 +22,18 @@
   <p>Thank you for being our valued customer.</p>
 
 {% else %}
-
   <!-- 6. Customer Not Login -->
   <p>Please login to view your account details.</p>
 
   <a href="{{ routes.account_login_url }}">Login</a>
-
 {% endif %}
 
-
 <style>
-
-.vip-badge {
-  background: gold;
-  color: black;
-  padding: 5px 12px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
+  .vip-badge {
+    background: gold;
+    color: black;
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+  }
 </style>
