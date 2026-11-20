@@ -1,0 +1,46 @@
+
+{% if customer %}
+
+  <!-- 1. Login / Logout Button -->
+  <a href="{{ routes.account_logout_url }}">Logout</a>
+
+  <!-- 2. Customer Details -->
+  <h3>Customer Details</h3>
+
+  <p>Name: {{ customer.name }}</p>
+  <p>Email: {{ customer.email }}</p>
+  <p>Phone: {{ customer.phone }}</p>
+
+  <!-- 3. Total Orders -->
+  <p>Total Orders: {{ customer.orders_count }}</p>
+
+  <!-- 4. VIP Customer Check -->
+  {% if customer.tags contains 'VIP' %}
+    <span class="vip-badge">VIP CUSTOMER</span>
+  {% endif %}
+
+  <!-- 5. Welcome Message -->
+  <h3>Welcome {{ customer.first_name }}!</h3>
+  <p>Thank you for being our valued customer.</p>
+
+{% else %}
+
+  <!-- 6. Customer Not Login -->
+  <p>Please login to view your account details.</p>
+
+  <a href="{{ routes.account_login_url }}">Login</a>
+
+{% endif %}
+
+
+<style>
+
+.vip-badge {
+  background: gold;
+  color: black;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+</style>
