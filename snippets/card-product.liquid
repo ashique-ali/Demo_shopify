@@ -307,26 +307,22 @@
               endif
             -%}
 
-            <div class="variant_swatches">
-              {% for variant in card_product.variants %}
-                {% if variant.metafields.custom.color != blank %}
-                  <span
-                    class="swatch"
-                    style="
-                      display: inline-block;
-                      width: 20px;
-                      height: 20px;
-                      border-radius: 50%;
-                      margin-right: 5px;
-                      background-color: {{ variant.metafields.custom.color }};
-                    "
-                    title="{{ variant.title }}"
-                  >
-                  </span>
-                {% endif %}
-              {% endfor %}
-            </div>
+          {% comment %} variants swatech  {% endcomment %}
 
+
+<div class="variant-box">
+  {% for variant in product.variants %}
+    <button
+      type="button"
+      class="variant-btn"
+      data-image="{{ variant.image | image_url: width: 600 }}"
+    >
+      {{ variant.title }}
+    </button>
+  {% endfor %}
+</div>
+
+{% comment %} end variants swatches {% endcomment %}
             {%- if card_product.variants_count > 100 or qty_rules -%}
               <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">
                 <button
