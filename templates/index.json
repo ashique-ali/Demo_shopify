@@ -167,6 +167,11 @@
         "collection3": "shoes",
         "products_limit": 12
       }
+    },
+    "customer_details_HqwE4y": {
+      "type": "customer-details",
+      "name": "Customer Details",
+      "settings": {}
     }
   },
   "order": [
@@ -175,6 +180,7 @@
     "hero_UzUHqr",
     "featured_collection",
     "custom_collection_tabs_UFNAiU",
-    "custom_collection_tabs_qeeYdJ"
+    "custom_collection_tabs_qeeYdJ",
+    "customer_details_HqwE4y"
   ]
 }
